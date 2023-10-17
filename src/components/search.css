@@ -1,0 +1,15 @@
+.searchBar {
+  width: 100vw;
+  height: 20vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.searchBar > input {
+  height: 50px;
+  width: 50%;
+  outline: none;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px #888;
+}

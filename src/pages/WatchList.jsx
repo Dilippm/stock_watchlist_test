@@ -1,25 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { removeFromWatchlist } from "../store/action";
-import Pagination from "../components/Pagination";
 
-const WatchList = ({ itemsPerPage }) => {
+const WatchList = () => {
   const dispatch = useDispatch();
   const watchlists = useSelector((state) => state.watchlist);
   const data = watchlists.addedItems;
-  const [currentPage, setCurrentPage] = useState(1);
 
   const handleDeleteFromWatchlist = (index) => {
     dispatch(removeFromWatchlist(index));
   };
-
-  const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div>
@@ -34,8 +24,8 @@ const WatchList = ({ itemsPerPage }) => {
             </tr>
           </thead>
           <tbody>
-            {currentItems.length > 0 ? (
-              currentItems.map((item, index) => (
+            {data.length > 0 ? (
+              data.map((item, index) => (
                 <tr key={index}>
                   <td>{item.name}</td>
                   <td>{item.price}</td>
@@ -56,12 +46,6 @@ const WatchList = ({ itemsPerPage }) => {
             )}
           </tbody>
         </table>
-        <Pagination
-          totalItems={data.length}
-          itemsPerPage={itemsPerPage}
-          currentPage={currentPage}
-          paginate={paginate}
-        />
       </div>
     </div>
   );

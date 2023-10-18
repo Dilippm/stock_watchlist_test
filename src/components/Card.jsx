@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToWatchlist } from "../store/action";
 import "./card.css";
-import Pagination from "./Pagination";
 
-const Card = ({ searchResults, itemsPerPage }) => {
+const Card = ({ searchResults }) => {
   const dispatch = useDispatch();
   const addedItems = useSelector((state) => state.watchlist.addedItems);
-  const [currentPage, setCurrentPage] = useState(1);
   const [message, setMessage] = useState("");
 
   const handleAddToWatchlist = (item) => {
@@ -18,14 +16,6 @@ const Card = ({ searchResults, itemsPerPage }) => {
       setMessage("Item added to the watchlist.");
     }
   };
-
-  const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = searchResults.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div>
@@ -40,7 +30,7 @@ const Card = ({ searchResults, itemsPerPage }) => {
             </tr>
           </thead>
           <tbody>
-            {currentItems.map((result, index) => (
+            {searchResults.map((result, index) => (
               <tr key={index}>
                 <td>{result.name}</td>
                 <td>{result.additionalData}</td>
@@ -52,12 +42,6 @@ const Card = ({ searchResults, itemsPerPage }) => {
           </tbody>
         </table>
       </div>
-      <Pagination
-        totalItems={searchResults.length}
-        itemsPerPage={itemsPerPage}
-        currentPage={currentPage}
-        paginate={paginate}
-      />
       <p style={{ fontWeight: "bold" }}>{message}</p>
     </div>
   );

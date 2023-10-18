@@ -2,11 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Search from "../components/Search";
 import Card from "../components/Card";
- const apiKey = process.env.REACT_APP_API_KEY;
-
+const apiKey = process.env.REACT_APP_API_KEY;
 
 const Home = () => {
-
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -30,22 +28,23 @@ const Home = () => {
         )
 
         .then(async (response) => {
+         
           const bestMatches = response.data.bestMatches;
 
-         
-          const updatedSearchResults = await Promise.all(
-            bestMatches.map(async (match) => {
-              const additionalData = await fetchAdditionalData(
-                match["1. symbol"]
-              );
+          const updatedSearchResults = bestMatches
+            ? await Promise.all(
+                bestMatches.map(async (match) => {
+                  const additionalData = await fetchAdditionalData(
+                    match["1. symbol"]
+                  );
 
-              return {
-                name: match["2. name"],
-
-                additionalData: additionalData,
-              };
-            })
-          );
+                  return {
+                    name: match["2. name"],
+                    additionalData: additionalData,
+                  };
+                })
+              )
+            : [];
           setSearchResults(updatedSearchResults);
         })
         .catch((error) => {
@@ -65,6 +64,7 @@ const Home = () => {
       const response = await axios.get(
         `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=${apiKey}`
       );
+  
       const timeSeriesData = response.data["Time Series (Daily)"];
       const dateKeys = Object.keys(timeSeriesData);
       const latestDate = dateKeys[0];
